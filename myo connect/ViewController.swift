@@ -26,15 +26,28 @@ class ViewController: UIViewController {
                 NSLog("Login error: %@", error!.localizedDescription);
             }
         }
-        
+
         logInButton.center = self.view.center
         self.view.addSubview(logInButton)
 
         // Do any additional setup after loading the view, typically from a nib.
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        let homeViewControllerObejct = self.storyboard?.instantiateViewControllerWithIdentifier("HomeViewController") as? HomeViewController
+
+        Twitter.sharedInstance().logInWithCompletion { session, error in
+            if (session != nil) {
+                print("signed in as \(session!.userName)");
+                self.navigationController?.pushViewController(homeViewControllerObejct!, animated: true)
+            } else {
+                print("error: \(error!.localizedDescription)");
+            }
+        }
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
+}
